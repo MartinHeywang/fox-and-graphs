@@ -1,0 +1,31 @@
+*,
+::before,
+::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    background-color: #222;
+    font-family: sans-serif;
+}
+
+#day {
+    position: fixed;
+    top: .5em;
+    right: .5em;
+
+    color: white;
+
+    font-size: 1.5em;
+}
+
+#graph {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+}
