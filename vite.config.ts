@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-    assetsInclude: ["**/*.gexf"]
+    assetsInclude: ["**/*.gexf"],
+    base: "/fox-and-graphs",
 })
