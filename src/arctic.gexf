@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gephi.org/gexf" xmlns:viz="http://www.gephi.org/gexf/viz">
+    <graph type="static">
+
+        <!-- define attributes n -->
+        <attributes class="node" type="static">
+            <attribute id="0" title="nodedef" type="string"/>
+            <attribute id="2" title="occurrences" type="integer"/>
+        </attributes>
+
+        <nodes>
+            <node id="0">
+                <viz:position x="0" y="0" z="0.0"/>
+                <viz:size value="30"/>
+                <attvalues>
+                    <attvalue id="0" value="n0" />
+                    <attvalue id="2" value="1"/>
+                </attvalues>
+            </node>
+            <node id="1">
+                <viz:position x="5" y="0" z="0.0"/>
+                <viz:size value="30"/>
+                <attvalues>
+                    <attvalue id="0" value="n1" />
+                    <attvalue id="2" value="143"/>
+                </attvalues>
+            </node>
+            <node id="2">
+                <viz:position x="10" y="0" z="0.0"/>
+                <viz:size value="30"/>
+                <attvalues>
+                    <attvalue id="0" value="n2" />
+                    <attvalue id="2" value="1"/>
+                </attvalues>
+            </node>
+        </nodes>
+        <edges>
+            <edge id="0" source="1" target="0"/>
+            <edge id="1" source="1" target="2"/>
+        </edges>
+    </graph>
+</gexf>

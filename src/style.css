@@ -11,21 +11,70 @@ body {
     font-family: sans-serif;
 }
 
-#day {
-    position: fixed;
-    top: .5em;
-    right: .5em;
-
-    color: white;
-
-    font-size: 1.5em;
-}
-
-#graph {
-    position: fixed;
-    top: 0;
-    left: 0;
-
+html,
+body,
+#sigma-container {
     width: 100vw;
     height: 100vh;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+}
+
+#status-bar {
+    display: flex;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    padding: .5em;
+
+    overflow-x: scroll;
+
+    background-color: #333;
+    color: white;
+
+    font-size: 1.3rem;
+}
+
+#status-bar #mode {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: max-content;
+
+    margin-right: 2em;
+}
+
+.mode-specific-status {
+    display: flex;
+    gap: .5em;
+}
+
+#status-bar button {
+    padding: .3em;
+    border: 0;
+    border-radius: 0;
+    background-color: #444;
+    color: inherit;
+}
+
+#status-bar button:focus-visible {
+    outline: 1px solid;
+}
+
+#status-bar button:hover {
+    translate: 0 -.2em;
+    cursor: pointer;
+}
+
+body.simulation .mode-specific-status :not(.in-simulation) {
+    display: none;
+}
+
+body.edition .mode-specific-status :not(.in-edition) {
+    display: none;
 }

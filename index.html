@@ -1,19 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="./src/style.css">
+        <link rel="stylesheet" href="./src/style.css" />
+        <script type="module" src="/src/main.ts" defer></script>
 
-    <title>Vite + TS</title>
-  </head>
-  <body>
-    <div id="graph"></div>
-
-    <div id="day">Jour 1</div>
-
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+        <title>Math En Jeans</title>
+    </head>
+    <body>
+        <div id="sigma-container"></div>
+        <div id="status-bar">
+            <div id="mode">
+                <span id="mode-name">Chargement...</span>
+                <button id="mode-change">Changer</button>
+            </div>
+            <div class="mode-specific-status">
+                <div id="day" class="in-simulation">Jour #-1</div>
+                <button id="back-button" class="in-simulation">Précédent</button>
+            </div>
+        </div>
+    </body>
 </html>
