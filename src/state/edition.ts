@@ -28,23 +28,18 @@ type Data = {
     };
 };
 
-// still to be done in this file
-// - change the action method to take only needed information, not event payloads
-// - so they can be called internally, w/o events
-
-function createNode(event: MouseCoords) {
+function createNode(vx: number, vy: number) {
     if (state.mode !== "edition") return;
-    event.preventSigmaDefault();
-
-    const coordForGraph = sigma.viewportToGraph({ x: event.x, y: event.y });
 
     const node = {
-        ...coordForGraph,
+        ...sigma.viewportToGraph({ x: vx, y: vy }),
         size: 30,
     };
 
     const id = uuid();
     graph.addNode(id, node);
+
+    selectNode(id);
 }
 
 function resetSelection() {
@@ -52,33 +47,30 @@ function resetSelection() {
     state.selection = null;
 }
 
-function selectNode(event: SigmaNodeEventPayload) {
+function selectNode(node: string) {
     if (state.mode !== "edition") return;
-    resetSelection();
 
-    const { node } = event;
+    resetSelection();
     state.selection = { type: "node", key: node };
 }
 
-function selectEdge(event: SigmaEdgeEventPayload) {
+function selectEdge(edge: string) {
     if (state.mode !== "edition") return;
     resetSelection();
-
-    const { edge } = event;
 
     state.selection = { key: edge, type: "edge" };
 }
 
-function createEdge(event: MouseCoords, node: string) {
+function createEdge(targetNode: string) {
     if (state.mode !== "edition") return;
-    if(state.selection === null) return;
-    if(state.selection.type !== "node") return;
 
-    event.preventSigmaDefault();
-    event.original.preventDefault();
+    // selection must be a node
+    // and not the one the user just clicked on
+    if (state.selection == null) return;
+    if (state.selection.type !== "node") return;
+    if (targetNode === state.selection.key) return;
 
-    if (node === state.selection.key) return;
-    graph.addEdge(state.selection.key, node);
+    graph.addEdge(state.selection.key, targetNode);
 }
 
 function deleteSelection() {
@@ -90,33 +82,27 @@ function deleteSelection() {
     state.selection = null;
 }
 
-function startDragging(event: SigmaNodeEventPayload) {
+function startDragging(node: string) {
     if (state.mode !== "edition") return;
-    event.preventSigmaDefault();
-
-    // only the main button counts
-    if (event.event.original.button !== 0) return;
 
     state.drag.isDragging = true;
-    state.drag.draggedNode = event.node;
+    state.drag.draggedNode = node;
+    selectNode(node);
 }
 
-function moveNode(event: MouseCoords) {
+// !! only works if a drag gesture is initiated
+function dragNode(vx: number, vy: number) {
     if (state.mode !== "edition") return;
     if (!state.drag.isDragging || !state.drag.draggedNode) return;
 
-    event.preventSigmaDefault();
-    event.original.preventDefault();
+    const { x, y } = sigma.viewportToGraph({ x: vx, y: vy });
 
-    const pos = sigma.viewportToGraph(event);
-
-    graph.setNodeAttribute(state.drag.draggedNode, "x", pos.x);
-    graph.setNodeAttribute(state.drag.draggedNode, "y", pos.y);
+    graph.setNodeAttribute(state.drag.draggedNode, "x", x);
+    graph.setNodeAttribute(state.drag.draggedNode, "y", y);
 }
 
-function stopDragging(event: MouseCoords) {
+function stopDragging() {
     if (state.mode !== "edition") return;
-    event.preventSigmaDefault();
 
     state.drag.isDragging = false;
     state.drag.draggedNode = null;
@@ -129,25 +115,68 @@ export function setup() {
     state.selection = null;
     state.edgeCreation = { tempNode: null };
 
-    const doubleClickStageFn: (payload: SigmaStageEventPayload) => void = ({ event }) =>
-        createNode(event);
-    const clickNodeFn: (payload: SigmaNodeEventPayload) => void = event =>
-        {selectNode(event); console.log("left click node fn")};
-    const clickEdgeFn: (payload: SigmaEdgeEventPayload) => void = event =>
-        selectEdge(event);
-    const clickStageFn: (payload: SigmaStageEventPayload) => void = () =>
-        resetSelection();
-    const rightClickNodeFn: (payload: SigmaNodeEventPayload) => void = ({
-        event,
-        node,
-    }) => {createEdge(event, node); console.log("right click node fn")}
+    const doubleClickStageFn: (payload: SigmaStageEventPayload) => void = payload => {
+        payload.preventSigmaDefault();
 
-    const downNodeFn: (payload: SigmaNodeEventPayload) => void = event =>
-        startDragging(event);
-    const mousemoveFn: (coords: MouseCoords) => void = coords => moveNode(coords);
-    const mouseupFn: (coords: MouseCoords) => void = coords => stopDragging(coords);
+        const { event } = payload;
+        createNode(event.x, event.y);
+    };
+
+    const clickNodeFn: (payload: SigmaNodeEventPayload) => void = payload => {
+        payload.preventSigmaDefault();
+
+        // info: where you left off
+        // - keep editing the methods like this (prevent defaults)
+        //      then test that everything works like before
+        // - work on the option "add star - flocon ..."
+        // - tackle the "state not initialized problem"
+        selectNode(payload.node);
+    };
+
+    const clickEdgeFn: (payload: SigmaEdgeEventPayload) => void = payload => {
+        payload.preventSigmaDefault();
+
+        selectEdge(payload.edge);
+    };
+
+    const clickStageFn: (payload: SigmaStageEventPayload) => void = payload => {
+        payload.preventSigmaDefault();
+
+        resetSelection();
+    };
+    
+    const rightClickNodeFn: (payload: SigmaNodeEventPayload) => void = payload => {
+        payload.preventSigmaDefault();
+        payload.event.original.preventDefault();
+
+        createEdge(payload.node);
+    };
+
+    const downNodeFn: (payload: SigmaNodeEventPayload) => void = payload => {
+        payload.preventSigmaDefault();
+
+        // only the main button count
+        // usually left click
+        if(payload.event.original.button !== 0) return;
+
+        startDragging(payload.node);
+    };
+    const mousemoveFn: (coords: MouseCoords) => void = coords => {
+        if (state.mode !== "edition") return;
+
+        // prevent sigma default (= move whole graph)
+        // if we're dragging
+        if(state.drag.isDragging) {
+            coords.preventSigmaDefault();
+            dragNode(coords.x, coords.y);
+        }
+    };
+    const mouseupFn: (coords: MouseCoords) => void = (coords) => {coords.preventSigmaDefault();stopDragging();}
     const keydownFn: (e: KeyboardEvent) => void = event => {
-        if (event.key === "Delete") deleteSelection();
+        if (event.key !== "Delete") return;
+        
+        event.preventDefault();
+        deleteSelection();
     };
 
     sigma.on("doubleClickStage", doubleClickStageFn);
