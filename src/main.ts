@@ -6,7 +6,7 @@ loadGraph(container).then(({ sigma }) => {
     
     // Disable the autoscale at the first down interaction
     sigma.getMouseCaptor().once("mousedown", () => {
-        sigma.setCustomBBox(sigma.getBBox());
+        // sigma.setCustomBBox(sigma.getBBox());
     });
 
     const changeModeButton = document.querySelector("#mode-change")!;

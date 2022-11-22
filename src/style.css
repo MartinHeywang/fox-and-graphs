@@ -11,6 +11,17 @@ body {
     font-family: sans-serif;
 }
 
+/* ACTUAL STYLES ========= */
+
+/* grid setting */
+body {
+    display: flex;
+}
+
+body > * {
+    width: 100%;
+}
+
 html,
 body,
 #sigma-container {
@@ -23,14 +34,22 @@ body,
     overflow: hidden;
 }
 
+#sigma-container {
+    flex-grow: 1;
+}
+
 #status-bar {
+    grid-row: 2;
     display: flex;
+    gap: 1.5em;
+    align-items: center;
 
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100vw;
+    min-height: 1em;
     padding: .5em;
 
     overflow-x: scroll;
@@ -45,8 +64,6 @@ body,
     flex-grow: 0;
     flex-shrink: 0;
     width: max-content;
-
-    margin-right: 2em;
 }
 
 .mode-specific-status {
