@@ -8,7 +8,7 @@ import { MouseCoords } from "sigma/types";
 import { v4 as uuid } from "uuid";
 
 import state from "./state";
-import { graph, sigma } from "../main";
+import { graph, sigma } from "../load";
 
 type State = { mode: "edition" } & Data;
 

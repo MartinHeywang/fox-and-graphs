@@ -1,5 +1,5 @@
 import { SigmaNodeEventPayload } from "sigma/sigma";
-import { graph, sigma } from "../main";
+import { graph, sigma } from "../load";
 import state from "./state";
 
 type State = { mode: "simulation" } & Data;
