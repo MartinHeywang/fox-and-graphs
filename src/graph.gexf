@@ -10,7 +10,7 @@
 
         <nodes>
             <node id="0">
-                <viz:position x="0" y="0" z="0.0"/>
+                <viz:position x="-5" y="0" z="0.0"/>
                 <viz:size value="30"/>
                 <attvalues>
                     <attvalue id="0" value="n0" />
@@ -18,7 +18,7 @@
                 </attvalues>
             </node>
             <node id="1">
-                <viz:position x="5" y="0" z="0.0"/>
+                <viz:position x="0" y="0" z="0.0"/>
                 <viz:size value="30"/>
                 <attvalues>
                     <attvalue id="0" value="n1" />
@@ -26,7 +26,7 @@
                 </attvalues>
             </node>
             <node id="2">
-                <viz:position x="10" y="0" z="0.0"/>
+                <viz:position x="5" y="0" z="0.0"/>
                 <viz:size value="30"/>
                 <attvalues>
                     <attvalue id="0" value="n2" />

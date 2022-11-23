@@ -32,7 +32,6 @@ const changeMode = (newMode: Modes) => {
     modeCleanupFn = modeMap[newMode].initFn();
 };
 
-
 let state = {
     mode: "simulation",
 
@@ -61,22 +60,16 @@ zoomInBtn.addEventListener("click", zoomIn);
 zoomOutBtn.addEventListener("click", zoomOut);
 zoomResetBtn.addEventListener("click", zoomReset);
 
-// info: where you left off
-// - just did zoom in, zoom out, zoom reset feature
-// - willing to create an option : calibrate on the graph, so every node is visible
-//      sigma.getCamera() has interesting methods, state, and there is also sigma.getCustomBBox() as well as sigma.getGraphDimensions()
-
 function zoomIn() {
-    sigma.getCamera().animatedZoom({ duration: 500 });
-
-
-    console.log(sigma.getCamera().getState());
+    sigma.getCamera().animatedZoom({ duration: 250 });
 }
 
 function zoomOut() {
-    sigma.getCamera().animatedUnzoom({ duration: 500 });
+    sigma.getCamera().animatedUnzoom({ duration: 250 });
 }
 
 function zoomReset() {
+    sigma.setCustomBBox(sigma.getBBox());
+    sigma.refresh();
     sigma.getCamera().animatedReset({ duration: 500 });
 }
