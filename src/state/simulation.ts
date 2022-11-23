@@ -12,7 +12,7 @@ function updateDayHtml() {
     if(state.mode !== "simulation") return;
 
     const dayHtml = document.querySelector<HTMLDivElement>("#day")!;
-    dayHtml.textContent = `Jour #${state.history.length}`;
+    dayHtml.textContent = `Jour ${state.history.length}`;
 }
 
 function resetFoxPositions() {
@@ -87,6 +87,16 @@ export function setup() {
     }
     backHtml.addEventListener("click", backFn);
 
+    const resetHtml = document.querySelector!("#reset-button")!;
+    const resetFn = () => {
+        if(state.mode !== "simulation") return;
+
+        state.history.splice(0);
+        updateFoxPositions();
+        updateDayHtml();
+    }
+    resetHtml.addEventListener("click", resetFn);
+
     return () => {
         sigma.off("clickNode", clickNodeFn);
 
@@ -97,6 +107,7 @@ export function setup() {
         sigma.setSetting("nodeReducer", (_, data) => data);
 
         backHtml.removeEventListener("click", backFn);
+        resetHtml.removeEventListener("click", resetFn);
     };
 }
 
