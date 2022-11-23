@@ -5,15 +5,24 @@
         <link rel="icon" type="image/svg+xml" href="/fox-and-graphs/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+            rel="stylesheet"
+        />
+
         
         
 
         <title>Math En Jeans</title>
-      <script type="module" crossorigin src="/fox-and-graphs/assets/index.475ce723.js"></script>
-      <link rel="stylesheet" href="/fox-and-graphs/assets/index.c5a6816a.css">
+      <script type="module" crossorigin src="/fox-and-graphs/assets/index.dadd743b.js"></script>
+      <link rel="stylesheet" href="/fox-and-graphs/assets/index.2691c185.css">
     </head>
     <body>
-        <div id="sigma-container"></div>
+        <div class="wrapper">
+            <div id="sigma-container"></div>
+        </div>
         <div id="status-bar">
             <div id="mode">
                 <span id="mode-name">Chargement...</span>
@@ -22,11 +31,14 @@
             <div class="general-status">
                 <button id="zoom-in-btn">Zoomer</button>
                 <button id="zoom-out-btn">Dézoomer</button>
-                <button id="reset-zoom-btn">100%</button>
+                <button id="reset-zoom-btn">Vue d'ensemble</button>
             </div>
             <div class="mode-specific-status">
-                <div id="day" class="in-simulation">Jour #-1</div>
+                <div id="day" class="in-simulation">Jour 0</div>
                 <button id="back-button" class="in-simulation">Précédent</button>
+                <button id="reset-button" class="in-simulation">
+                    Recommencer la simulation
+                </button>
             </div>
         </div>
     </body>
