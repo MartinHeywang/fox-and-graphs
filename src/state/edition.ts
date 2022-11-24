@@ -31,10 +31,27 @@ type Data = {
 function createNode(vx: number, vy: number) {
     if (state.mode !== "edition") return;
 
+    let { x, y } = sigma.viewportToGraph({ x: vx, y: vy });
+    x = Math.round(x);
+    y = Math.round(y);
+
     const node = {
-        ...sigma.viewportToGraph({ x: vx, y: vy }),
+        x,
+        y,
         size: 30,
     };
+
+    // if there is already a node on these coordinates, don't create
+    if (
+        graph
+            .nodes()
+            .some(
+                node =>
+                    graph.getNodeAttribute(node, "x") === x &&
+                    graph.getNodeAttribute(node, "y") === y
+            )
+    )
+        return;
 
     const id = uuid();
     graph.addNode(id, node);
@@ -95,7 +112,24 @@ function dragNode(vx: number, vy: number) {
     if (state.mode !== "edition") return;
     if (!state.drag.isDragging || !state.drag.draggedNode) return;
 
-    const { x, y } = sigma.viewportToGraph({ x: vx, y: vy });
+    let { x, y } = sigma.viewportToGraph({ x: vx, y: vy });
+
+    // rounding the coordinates
+    // so the nodes only move on integer coordinates
+    x = Math.round(x);
+    y = Math.round(y);
+
+    // if there is already a node on these coordinates, don't move
+    if (
+        graph
+            .nodes()
+            .some(
+                node =>
+                    graph.getNodeAttribute(node, "x") === x &&
+                    graph.getNodeAttribute(node, "y") === y
+            )
+    )
+        return;
 
     graph.setNodeAttribute(state.drag.draggedNode, "x", x);
     graph.setNodeAttribute(state.drag.draggedNode, "y", y);
@@ -144,7 +178,7 @@ export function setup() {
 
         resetSelection();
     };
-    
+
     const rightClickNodeFn: (payload: SigmaNodeEventPayload) => void = payload => {
         payload.preventSigmaDefault();
         payload.event.original.preventDefault();
@@ -157,7 +191,7 @@ export function setup() {
 
         // only the main button count
         // usually left click
-        if(payload.event.original.button !== 0) return;
+        if (payload.event.original.button !== 0) return;
 
         startDragging(payload.node);
     };
@@ -166,15 +200,18 @@ export function setup() {
 
         // prevent sigma default (= move whole graph)
         // if we're dragging
-        if(state.drag.isDragging) {
+        if (state.drag.isDragging) {
             coords.preventSigmaDefault();
             dragNode(coords.x, coords.y);
         }
     };
-    const mouseupFn: (coords: MouseCoords) => void = (coords) => {coords.preventSigmaDefault();stopDragging();}
+    const mouseupFn: (coords: MouseCoords) => void = coords => {
+        coords.preventSigmaDefault();
+        stopDragging();
+    };
     const keydownFn: (e: KeyboardEvent) => void = event => {
         if (event.key !== "Delete") return;
-        
+
         event.preventDefault();
         deleteSelection();
     };
