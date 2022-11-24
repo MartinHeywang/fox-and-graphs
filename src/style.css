@@ -63,7 +63,12 @@ body,
 
 .mode-specific-status, .general-status {
     display: flex;
+    align-items: center;
     gap: .3em;
+}
+
+.margin-left {
+    margin-left: 1.5em;
 }
 
 #status-bar button {

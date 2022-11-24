@@ -1,15 +1,16 @@
 import { SigmaNodeEventPayload } from "sigma/sigma";
 import { graph, sigma } from "../load";
+import { exportPNG } from "../export";
 import state from "./state";
 
 type State = { mode: "simulation" } & Data;
 
 type Data = {
-    history: (Map<string, boolean>)[];
+    history: Map<string, boolean>[];
 };
 
 function updateDayHtml() {
-    if(state.mode !== "simulation") return;
+    if (state.mode !== "simulation") return;
 
     const dayHtml = document.querySelector<HTMLDivElement>("#day")!;
     dayHtml.textContent = `Jour ${state.history.length}`;
@@ -18,12 +19,12 @@ function updateDayHtml() {
 function resetFoxPositions() {
     graph.nodes().forEach(node => {
         graph.setNodeAttribute(node, "possibleFox", true);
-    })
+    });
 }
 
 function updateFoxPositions() {
-    if(state.mode !== "simulation") return;
-    if(state.history.length === 0) return resetFoxPositions();
+    if (state.mode !== "simulation") return;
+    if (state.history.length === 0) return resetFoxPositions();
 
     state.history.at(-1)!.forEach((possibleFox, node) => {
         graph.setNodeAttribute(node, "possibleFox", possibleFox);
@@ -39,9 +40,9 @@ function simulateNextDay(payload: SigmaNodeEventPayload) {
 
     graph.nodes().forEach(node => {
         const newPossibleFox = graph.neighbors(node).some(neighbor => {
-            // the neighbor is the one we clicked, 
+            // the neighbor is the one we clicked,
             // then it is considered as if it could not contain the fox
-            if(neighbor === payload.node) return false;
+            if (neighbor === payload.node) return false;
             return graph.getNodeAttribute(neighbor, "possibleFox");
         });
 
@@ -52,7 +53,7 @@ function simulateNextDay(payload: SigmaNodeEventPayload) {
 }
 
 export function setup() {
-    if(state.mode !== "simulation") return;
+    if (state.mode !== "simulation") return;
 
     const clickNodeFn: (payload: SigmaNodeEventPayload) => void = payload =>
         simulateNextDay(payload);
@@ -68,7 +69,7 @@ export function setup() {
 
         res.color = "orange";
 
-        if(graph.getNodeAttribute(node, "possibleFox") === false) {
+        if (graph.getNodeAttribute(node, "possibleFox") === false) {
             res.color = "red";
         }
 
@@ -80,22 +81,28 @@ export function setup() {
 
     const backHtml = document.querySelector!("#back-button")!;
     const backFn = () => {
-        if(state.mode !== "simulation") return;
+        if (state.mode !== "simulation") return;
         state.history.pop();
         updateFoxPositions();
         updateDayHtml();
-    }
+    };
     backHtml.addEventListener("click", backFn);
 
     const resetHtml = document.querySelector!("#reset-button")!;
     const resetFn = () => {
-        if(state.mode !== "simulation") return;
+        if (state.mode !== "simulation") return;
 
         state.history.splice(0);
         updateFoxPositions();
         updateDayHtml();
-    }
+    };
     resetHtml.addEventListener("click", resetFn);
+
+    const exportPNGHtml = document.querySelector<HTMLButtonElement>("#export-png")!;
+    const exportPNGFn = () => {
+        exportPNG(sigma);
+    };
+    exportPNGHtml.addEventListener("click", exportPNGFn);
 
     return () => {
         sigma.off("clickNode", clickNodeFn);
@@ -108,6 +115,7 @@ export function setup() {
 
         backHtml.removeEventListener("click", backFn);
         resetHtml.removeEventListener("click", resetFn);
+        exportPNGHtml.removeEventListener("click", exportPNGFn);
     };
 }
 
