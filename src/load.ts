@@ -16,6 +16,7 @@ export async function loadGraph(container: HTMLElement) {
     sigma = new Sigma(graph, container, {
         minCameraRatio: 0.1,
         maxCameraRatio: 10,
+        enableEdgeClickEvents: true,
     });
 
     return { graph, sigma };

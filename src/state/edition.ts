@@ -230,7 +230,24 @@ export function setup() {
         if (state.mode !== "edition") return data;
 
         const res = { ...data };
-        if (node === state.selection?.key) {
+
+        res.color = "#888"
+
+        if (state.selection?.type === "node" && node === state.selection?.key) {
+            res.color = "dodgerblue";
+        }
+
+        return res;
+    });
+
+    sigma.setSetting("edgeReducer", (edge, data) => {
+        if (state.mode !== "edition") return data;
+
+        const res = { ...data };
+        res.size = 4
+        res.color = "#666";
+
+        if (state.selection?.type === "edge" && edge === state.selection?.key) {
             res.color = "dodgerblue";
         }
 
@@ -250,6 +267,7 @@ export function setup() {
         window.removeEventListener("keydown", keydownFn);
 
         sigma.setSetting("nodeReducer", (_node, data) => data);
+        sigma.setSetting("edgeReducer", (_edge, data) => data);
     };
 }
 
