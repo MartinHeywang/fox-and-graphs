@@ -231,7 +231,7 @@ export function setup() {
 
         const res = { ...data };
 
-        res.color = "#888"
+        res.color = "#888";
 
         if (state.selection?.type === "node" && node === state.selection?.key) {
             res.color = "dodgerblue";
@@ -244,7 +244,7 @@ export function setup() {
         if (state.mode !== "edition") return data;
 
         const res = { ...data };
-        res.size = 4
+        res.size = 4;
         res.color = "#666";
 
         if (state.selection?.type === "edge" && edge === state.selection?.key) {
@@ -253,6 +253,14 @@ export function setup() {
 
         return res;
     });
+
+    const deleteAllHtml = document.querySelector<HTMLButtonElement>("#delete-all")!;
+    const deleteAllFn = () => graph.clear();
+    deleteAllHtml.addEventListener("click", deleteAllFn);
+
+    const deleteEdgesHtml = document.querySelector<HTMLButtonElement>("#delete-edges")!;
+    const deleteEdgesFn = () => graph.clearEdges();
+    deleteEdgesHtml.addEventListener("click", deleteEdgesFn);
 
     // cleanup function
     return () => {
@@ -268,6 +276,9 @@ export function setup() {
 
         sigma.setSetting("nodeReducer", (_node, data) => data);
         sigma.setSetting("edgeReducer", (_edge, data) => data);
+
+        deleteAllHtml.removeEventListener("click", deleteAllFn);
+        deleteEdgesHtml.removeEventListener("click", deleteEdgesFn);
     };
 }
 
