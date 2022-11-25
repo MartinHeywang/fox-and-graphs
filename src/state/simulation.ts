@@ -75,6 +75,13 @@ export function setup() {
 
         return res;
     });
+    sigma.setSetting("edgeReducer", (_edge, data) => {
+        return {
+            ...data,
+            size: 4,
+            color: "#666"
+        }
+    })
 
     state.history = [];
     updateDayHtml();
@@ -111,7 +118,8 @@ export function setup() {
             graph.removeNodeAttribute(node, "possibleFox");
         });
 
-        sigma.setSetting("nodeReducer", (_, data) => data);
+        sigma.setSetting("nodeReducer", (_node, data) => data);
+        sigma.setSetting("edgeReducer", (_edge, data) => data);
 
         backHtml.removeEventListener("click", backFn);
         resetHtml.removeEventListener("click", resetFn);
