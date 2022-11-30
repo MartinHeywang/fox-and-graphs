@@ -16,8 +16,8 @@
         
 
         <title>Math En Jeans</title>
-      <script type="module" crossorigin src="/fox-and-graphs/assets/index.dadd743b.js"></script>
-      <link rel="stylesheet" href="/fox-and-graphs/assets/index.2691c185.css">
+      <script type="module" crossorigin src="/fox-and-graphs/assets/index.7137c902.js"></script>
+      <link rel="stylesheet" href="/fox-and-graphs/assets/index.ae3895f0.css">
     </head>
     <body>
         <div class="wrapper">
@@ -34,11 +34,19 @@
                 <button id="reset-zoom-btn">Vue d'ensemble</button>
             </div>
             <div class="mode-specific-status">
+                <!-- Simulation specific settings -->
                 <div id="day" class="in-simulation">Jour 0</div>
                 <button id="back-button" class="in-simulation">Précédent</button>
                 <button id="reset-button" class="in-simulation">
                     Recommencer la simulation
                 </button>
+                
+                <div class="margin-left in-simulation">Exporter</div>
+                <button id="export-png" class="in-simulation">.png</button>
+
+                <!-- Edition specific settings -->
+                <button id="delete-all" class="in-edition">Tout supprimer</button>
+                <button id="delete-edges" class="in-edition">Supprimer tous les liens</button>
             </div>
         </div>
     </body>
